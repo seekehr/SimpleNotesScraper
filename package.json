@@ -4,10 +4,11 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "node init && tsc"
   },
   "dependencies": {
     "dotenv": "^18.0.5",
+    "node-fetch": "^3.3.2",
     "ws": "^8.22.0"
   },
   "devDependencies": {
