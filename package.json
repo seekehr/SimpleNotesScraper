@@ -6,8 +6,12 @@
   "scripts": {
     "build": "tsc"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "ws": "^8.22.0"
+  },
   "devDependencies": {
+    "@types/ws": "^8.18.2",
     "typescript": "^5.5.3"
   },
   "private": true

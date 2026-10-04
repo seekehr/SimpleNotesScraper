@@ -12,3 +12,5 @@ yarn-error.log*
 .idea/
 .cursor/
 .claude/
+
+.env
