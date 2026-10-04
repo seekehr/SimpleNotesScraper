@@ -1,4 +1,6 @@
 import "dotenv/config";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import WebSocket from "ws";
 
 const { TOKEN, GMAIL } = process.env;
@@ -6,6 +8,26 @@ const { TOKEN, GMAIL } = process.env;
 if (!TOKEN || !GMAIL) {
     throw new Error("TOKEN and GMAIL must be set in .env");
 }
+
+const outputDirectory = join(process.cwd(), "output");
+
+rmSync(outputDirectory, { recursive: true, force: true });
+mkdirSync(outputDirectory, { recursive: true });
+
+const sanitizeFileName = (title: string) => {
+    const sanitizedTitle = title
+        .replace(/[<>:"/\\|?*\u0000-\u001F]/g, "_")
+        .replace(/[. ]+$/g, "")
+        .slice(0, 200);
+
+    if (!sanitizedTitle) {
+        return "Untitled";
+    }
+
+    return /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i.test(sanitizedTitle)
+        ? `_${sanitizedTitle}`
+        : sanitizedTitle;
+};
 
 const ws = new WebSocket(
     "wss://api.simperium.com/sock/1/chalk-bump-f49/websocket"
@@ -60,6 +82,11 @@ ws.on("message", (raw) => {
                         : null,
                 };
             });
+
+        notes.forEach((note: any) => {
+            const fileName = `${sanitizeFileName(note.title)}.txt`;
+            writeFileSync(join(outputDirectory, fileName), note.content, "utf8");
+        });
 
         console.log("\nNOTES:");
         console.dir(notes, { depth: null });
