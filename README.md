@@ -1,4 +1,4 @@
-# Simple Notes Scraper
+# Simple Notes Scraper <3
 
 Pulls notes from https://simplenote.com/ and saves them as text files.
 
