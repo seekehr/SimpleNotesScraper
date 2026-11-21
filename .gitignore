@@ -11,9 +11,8 @@ dist/
 
 output/
 
-.vscode/*
 .idea/
 .cursor/
 .claude/
 
-.env
+config.bat
