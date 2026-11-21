@@ -1,7 +1,25 @@
-import "dotenv/config";
+#!/usr/bin/env node
+import { config as loadEnv } from "dotenv";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import WebSocket from "ws";
+
+const argv = process.argv.slice(2);
+
+if (argv.includes("--help") || argv.includes("-h")) {
+    console.log("Usage: simplenotesscraper [--env-dir <folder containing .env>]");
+    console.log("Exports all Simplenote notes as .txt files into ./output (relative to the current folder).");
+    process.exit(0);
+}
+
+const envDirIndex = argv.indexOf("--env-dir");
+const envDir = envDirIndex !== -1 ? argv[envDirIndex + 1] : undefined;
+
+if (envDirIndex !== -1 && !envDir) {
+    throw new Error("--env-dir requires a folder path");
+}
+
+loadEnv({ path: join(envDir ?? process.cwd(), ".env") });
 
 const { TOKEN, GMAIL } = process.env;
 
